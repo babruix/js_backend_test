@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="clientApp">
+<head>
+  <meta charset="UTF-8">
+  <title>File browser</title>
+  <script type="text/javascript"
+          src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+</head>
+<body>
+
+<div ng-controller="BrowseController">
+
+  <h1>File browser</h1>
+
+  Base folder:
+  <input type="text" ng-model="basedir" size="50"/>
+
+  Max entries:
+  <input type="text" ng-model="maxEntries"/>
+
+  Current file
+  <input type="text" ng-model="curFile" />
+
+  Api status {{ apiStatus }}
+
+  <section>
+    <ul>
+      <li ng-repeat="file in files"><a href="javascript:void(0)"> {{ file }} </a> </li>
+    </ul>
+  </section>
+
+  <section>
+    <ul>
+      <li> Name: {{ fileInfo.Name }} </li>
+      <li> Size: {{ fileInfo.Size }} </li>
+      <li> Created: {{ fileInfo.Created }} </li>
+      <li> Modified: {{ fileInfo.Modified }} </li>
+      <li> Extension: {{ fileInfo.Extension }} </li>
+      <li> Mime: {{ fileInfo.Mime }} </li>
+    </ul>
+  </section>
+
+</div>
+
+<script type="text/javascript">
+
+  var app = angular.module('clientApp', []);
+  app.controller('BrowseController', function($scope, $http) {
+
+    $scope.apiStatus = 'OK';
+    $scope.maxEntries = 10;
+    $scope.basedir = 'checking current directory...';
+
+    //@todo: change fileName on click
+    $scope.curFile = 'app.js';
+
+    $http.get("http://localhost:8000/api/listDirectory/")
+        .then(function(response) {
+          $scope.files = response.data;
+        });
+
+    $http.get("http://localhost:8000/api/listDirectory/getPath")
+        .then(function(response) {
+          $scope.basedir = response.data;
+        });
+
+    $http.get('http://localhost:8000/api/listDirectory/fileInfo/' + $scope.curFile).
+    success(function(data, status, headers, config) {
+      $scope.fileInfo = data;
+    }).
+    error(function(data, status, headers, config) {
+      console.log('Error:' + data);
+    });
+  });
+
+</script>
+</body>
+</html>
