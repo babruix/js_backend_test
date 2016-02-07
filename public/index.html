@@ -25,7 +25,7 @@
 
   <section>
     <ul>
-      <li ng-repeat="file in files"><a href="javascript:void(0)"> {{ file }} </a> </li>
+      <li ng-repeat="file in files"><a href="javascript:void(0)" ng-click="changeFile(file)"> {{ file }} </a> </li>
     </ul>
   </section>
 
@@ -64,13 +64,21 @@
           $scope.basedir = response.data;
         });
 
-    $http.get('http://localhost:8000/api/listDirectory/fileInfo/' + $scope.curFile).
-    success(function(data, status, headers, config) {
-      $scope.fileInfo = data;
-    }).
-    error(function(data, status, headers, config) {
-      console.log('Error:' + data);
-    });
+    function requestFileInfo(currentFile) {
+      $http.get('http://localhost:8000/api/listDirectory/fileInfo/' + currentFile)
+          .success(function (data, status, headers, config) {
+            $scope.fileInfo = data;
+          }).error(function (data, status, headers, config) {
+        console.log('Error:' + data);
+      });
+    }
+
+    requestFileInfo($scope.curFile);
+
+    $scope.changeFile = function (filename) {
+      $scope.curFile = filename;
+      requestFileInfo($scope.curFile);
+    }
   });
 
 </script>
