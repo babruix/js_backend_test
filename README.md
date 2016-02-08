@@ -3,7 +3,7 @@
 1. Install all required dependincies:
 npm install
 
-2. Run app via gulp nodeman on port 8000:
+2. Run app via gulp nodemon on port 8000:
 gulp
 
 Or you can run directly on port 3000:
@@ -11,7 +11,7 @@ node app.js
 However current client implementation assumes that app is running on port 8000.
 
 
-Nodeman will automatically restart app when chaning content of js files.
+Nodemon will automatically restart app when chaning content of js files.
 
 
 ## API server.
