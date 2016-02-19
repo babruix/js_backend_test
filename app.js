@@ -10,6 +10,7 @@ var baseDir = process.env.PWD || './';
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+app.use(express.static('public'));
 
 directoryRouter = require('./Routes/directoryRoutes')(baseDir);
 app.use('/api/listDirectory', directoryRouter);
